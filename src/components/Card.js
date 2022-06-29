@@ -1,7 +1,7 @@
 import { Draggable } from "react-beautiful-dnd";
 import { BiTrash } from "react-icons/bi";
 
-const Card = ({ item, index, provided }) => {
+const Card = ({ item, index, provided, columnId, deleteCard }) => {
   return (
     <Draggable key={item.id} draggableId={item.id} index={index}>
       {(provided, snapshot) => {
@@ -10,7 +10,7 @@ const Card = ({ item, index, provided }) => {
             ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
-            className="text-gray-700 mb-4 shadow-md rounded-md p-[10px] bg-white dark:bg-gray-700 w-full"
+            className="text-gray-700 mb-4 shadow-md rounded-md p-[10px] bg-white dark:bg-gray-700 w-full hover:opacity-90"
             style={{
               userSelect: "none",
               ...provided.draggableProps.style,
@@ -20,23 +20,15 @@ const Card = ({ item, index, provided }) => {
               <span class="text-gray-600 font-medium text-[16.5px] dark:text-white ml-2 mr-3">
                 Complete React Work
               </span>
-              <button class="text-gray-700 text-md mt-1">
+              <button
+                class="text-gray-700 text-md p-1 hover:text-red-700"
+                onClick={() => deleteCard(columnId, item)}
+              >
                 <BiTrash />
               </button>
             </div>
 
-            <div className="flex flex-wrap mt-1">
-              <span class="flex justify-center items-center font-medium text-[12px] h-6 px-4 m-1 rounded border-stone-300 border text-gray-800 ">
-                Technology
-              </span>
-              {/* <span class="flex justify-center items-center font-medium text-[12px] h-6 px-4 m-1 rounded border-stone-300 border text-gray-800">
-                Science
-              </span> */}
-            </div>
-
-            <p className="px-2 pt-1 mb-3 text-[14px]">
-              Lorem ipsum dolor sit amet color senic.
-            </p>
+            <p className="px-2 pt-1 mb-3 text-[14.5px]">{item.content}</p>
 
             <hr />
 
