@@ -1,7 +1,11 @@
+import { useContext } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { BiTrash } from "react-icons/bi";
+import KanbanContext from "../KanbanContext";
 
-const Card = ({ item, index, provided, columnId, deleteCard }) => {
+const Card = ({ item, index, columnId }) => {
+  const { deleteCard } = useContext(KanbanContext);
+
   return (
     <Draggable key={item.id} draggableId={item.id} index={index}>
       {(provided, snapshot) => {
@@ -18,7 +22,7 @@ const Card = ({ item, index, provided, columnId, deleteCard }) => {
           >
             <div class="flex items-start justify-between">
               <span class="text-gray-600 font-medium text-[16.5px] dark:text-white ml-2 mr-3">
-                Complete React Work
+                {item.title}
               </span>
               <button
                 class="text-gray-700 text-md p-1 hover:text-red-700"
@@ -28,17 +32,19 @@ const Card = ({ item, index, provided, columnId, deleteCard }) => {
               </button>
             </div>
 
-            <p className="px-2 pt-1 mb-3 text-[14.5px]">{item.content}</p>
+            <p className="px-2 pt-1 mb-3 text-[14.5px] pr-4">
+              {item.description}
+            </p>
 
             <hr />
 
             <div className="flex items-center px-2 pt-2">
               <img
-                src="https://cdn4.iconfinder.com/data/icons/avatars-21/512/avatar-circle-human-male-black-7-512.png"
+                src="https://www.pngall.com/wp-content/uploads/12/Avatar-Profile-PNG-Image-File.png"
                 alt="Avatar"
                 className="h-8 mr-3"
               />
-              <span className="text-[15px]">Peter Griffin</span>
+              <span className="text-[15px]">{item.member}</span>
             </div>
           </div>
         );

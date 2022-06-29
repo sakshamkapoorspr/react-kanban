@@ -1,31 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
+import { useContext } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
-import { v4 as uuid } from "uuid";
 import Column from "./Column";
-
-const itemsFromBackend = [
-  { id: uuid(), content: "First task" },
-  { id: uuid(), content: "Second task" },
-];
-
-const columnsFromBackend = {
-  [uuid()]: {
-    name: "Requested",
-    items: itemsFromBackend,
-  },
-  [uuid()]: {
-    name: "To Do",
-    items: [],
-  },
-  [uuid()]: {
-    name: "In Progress",
-    items: [],
-  },
-  [uuid()]: {
-    name: "Done",
-    items: [],
-  },
-};
+import KanbanContext from "../KanbanContext";
 
 const onDragEnd = (result, columns, setColumns) => {
   if (!result.destination) return;
@@ -65,27 +41,7 @@ const onDragEnd = (result, columns, setColumns) => {
 };
 
 const Kanban = () => {
-  const [columns, setColumns] = useState(() => {
-    const localData = JSON.parse(localStorage.getItem("kanban-data"));
-    return localData || columnsFromBackend;
-  });
-
-  useEffect(() => {
-    localStorage.setItem("kanban-data", JSON.stringify(columns));
-  }, [columns]);
-
-  const addCard = (columnId) => {
-    const newColumns = { ...columns };
-    newColumns[columnId].items.push({ id: uuid(), content: "First task" });
-    setColumns(newColumns);
-  };
-
-  const deleteCard = (columnId, item) => {
-    const newColumns = { ...columns };
-    const idx = newColumns[columnId].items.indexOf(item);
-    newColumns[columnId].items.splice(idx, 1);
-    setColumns(newColumns);
-  };
+  const { columns, setColumns } = useContext(KanbanContext);
 
   return (
     <div class="bg-slate-100 min-h-screen flex p-16 justify-center">
@@ -93,12 +49,7 @@ const Kanban = () => {
         onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
       >
         {Object.entries(columns).map(([columnId, column]) => (
-          <Column
-            column={column}
-            columnId={columnId}
-            addCard={addCard}
-            deleteCard={deleteCard}
-          />
+          <Column column={column} columnId={columnId} />
         ))}
       </DragDropContext>
     </div>
